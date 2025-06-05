@@ -235,7 +235,55 @@ public class AuthorDAO {
 	
 	
 	// 데이터 1개 가져오기
-	
+	public AuthorVO authorSelectOne(int authorId) {
+		
+		//vo
+		AuthorVO authorVO = null;
+		
+		
+		// 0. import java.sql.*;
+		
+		// 1. JDBC 드라이버 (MySQL) 로딩
+		// 2. Connection 얻어오기
+		this.connect();	
+
+		try {
+			
+			// 3. SQL문 준비 / 바인딩 / 실행
+			// SQL문 준비
+			String query = "";
+			query += " select	author_id, ";
+			query += "		    author_name, ";
+			query += "          author_desc ";
+			query += " from author ";
+			query += " where author_id = ? ";
+			
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, authorId);
+			
+			//실행
+			rs = pstmt.executeQuery();
+
+			// 4.결과처리
+			rs.next();
+			
+			int id = rs.getInt("author_id");
+			String name = rs.getString("author_name");
+			String desc = rs.getString("author_desc");
+			
+			authorVO = new AuthorVO(id, name, desc);
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} 
+		
+		// 5. 자원정리
+		this.close();
+		
+		return authorVO;
+		
+	}
 	
 	
 	
