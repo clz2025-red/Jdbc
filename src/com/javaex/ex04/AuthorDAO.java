@@ -3,14 +3,18 @@ package com.javaex.ex04;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AuthorDAO {
 
 	//필드
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
-	//private ResultSet rs = null;
+	private ResultSet rs = null;
 	
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://localhost:3306/web_db";
@@ -65,13 +69,12 @@ public class AuthorDAO {
 		int count = -1;
 		
 		// 0. import java.sql.*;
-
+		
+		// 1. JDBC 드라이버 (MySQL) 로딩
+		// 2. Connection 얻어오기
+		this.connect();
+		
 		try {
-			
-			// 1. JDBC 드라이버 (MySQL) 로딩
-			// 2. Connection 얻어오기
-			this.connect();
-			
 			
 			// 3. SQL문 준비 / 바인딩 / 실행
 			//SQL문 준비 
@@ -106,11 +109,11 @@ public class AuthorDAO {
 		
 		// 0. import java.sql.*;
 		
+		// 1. JDBC 드라이버 (MySQL) 로딩
+		// 2. Connection 얻어오기
+		this.connect();
+		
 		try {
-			// 1. JDBC 드라이버 (MySQL) 로딩
-			// 2. Connection 얻어오기
-			this.connect();
-			
 
 			// 3. SQL문 준비 / 바인딩 / 실행
 			// SQL문 준비
@@ -130,6 +133,40 @@ public class AuthorDAO {
 			count = pstmt.executeUpdate();
 			
 			// 4.결과처리
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} 
+		
+		// 5. 자원정리
+		this.close();
+		
+		return count;
+	}
+	
+	// 작가 삭제
+	public int authorDelete(int authorId) {
+		int count = -1;
+		
+		//1. 2.  DB connect
+		this.connect();	
+
+		try {
+			
+			// 3. SQL문 준비 / 바인딩 / 실행
+			// SQL문 준비
+			String query = "";
+			query += " delete from author ";
+			query += " where author_id = ? ";
+			
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, authorId);             // 메소드 파라미터
+			
+			//실행
+			count = pstmt.executeUpdate();
+			
+			// 4.결과처리
 
 			
 		} catch (SQLException e) {
@@ -141,6 +178,70 @@ public class AuthorDAO {
 		
 		return count;
 	}
+	
+	// 작가 리스트
+	public List<AuthorVO> authorSelect(){
+		
+		//리스트
+		List<AuthorVO> authorList = new ArrayList<AuthorVO>();
+		
+		// 0. import java.sql.*;
+		
+		// 1. JDBC 드라이버 (MySQL) 로딩
+		// 2. Connection 얻어오기
+		this.connect();	
+
+		try {
+			
+			// 3. SQL문 준비 / 바인딩 / 실행
+			// SQL문 준비
+			String query = "";
+			query +=" select author_id, ";
+			query +="        author_name, ";
+			query +="        author_desc ";
+			query +=" from author ";
+			
+			// 바인딩 
+			pstmt = conn.prepareStatement(query);
+			
+			//실행
+			rs = pstmt.executeQuery();
+
+		    // 4.결과처리 (java 리스트로 만든다)
+			while(rs.next()) {
+				
+				int authorId = rs.getInt("author_id");
+				String authorName = rs.getString("author_name");
+				String authorDesc = rs.getString("author_desc");
+				
+				//데이터 객체로 만들기(묶기)
+				AuthorVO authorVO = new AuthorVO(authorId, authorName, authorDesc);
+				
+				//묶은 데이터를 리스트에 달기
+				authorList.add(authorVO);
+			}
+
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} 
+		
+		// 5. 자원정리
+		this.close();
+		
+		return authorList;
+		
+	}
+	
+	
+	// 데이터 1개 가져오기
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

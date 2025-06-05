@@ -7,21 +7,20 @@ public class AuthorApp {
 	public static void main(String[] args) {
 	
 		AuthorDAO authorDAO = new AuthorDAO();
-		
-		//authorDAO.connect();
-		
+
 		
 		//int c01 = authorDAO.authorInsert("김종국", "런닝맨1기");
 		
-		int c02 = authorDAO.authorUpdate(15, "양세찬", "런닝맨");
+		// int c02 = authorDAO.authorUpdate(16, "조세호", "유퀴즈");
 
-		//int c03 = authorDAO.authorDelete(2);
+		//int c03 = authorDAO.authorDelete(15);
 		
-		//List<AuthorVO> authorList = authorDAO.authorSelect();
+		List<AuthorVO> authorList = authorDAO.authorSelect();
+		System.out.println(authorList);
 		
+		AuthorVO authorVO =  authorDAO.authorSelectOne(3);
 		
-		
-		
+				
 	}
 
 }
