@@ -16,6 +16,7 @@ public class AuthorSelect {
 		List<AuthorVO> aList = new ArrayList<AuthorVO>(); 
 			
 		
+		
 		// 0. import java.sql.*;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
