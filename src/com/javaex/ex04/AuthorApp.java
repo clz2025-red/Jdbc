@@ -8,9 +8,9 @@ public class AuthorApp {
 	
 		AuthorDAO authorDAO = new AuthorDAO();
 		
-		//int c01 = authorDAO.authorInsert("하하", "런닝맨");
+		//int c01 = authorDAO.authorInsert("김종국", "런닝맨1기");
 		
-		int c02 = authorDAO.authorUpdate(14, "양세찬", "런닝맨");
+		int c02 = authorDAO.authorUpdate(15, "양세찬", "런닝맨");
 
 		//int c03 = authorDAO.authorDelete(2);
 		

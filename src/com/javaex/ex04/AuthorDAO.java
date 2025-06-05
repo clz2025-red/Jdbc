@@ -8,6 +8,14 @@ import java.sql.SQLException;
 public class AuthorDAO {
 
 	//필드
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	//private ResultSet rs = null;
+	
+	private String driver = "com.mysql.cj.jdbc.Driver";
+	private String url = "jdbc:mysql://localhost:3306/web_db";
+	private String id = "web";
+	private String pw = "web";
 	
 	//생성자
 	public AuthorDAO() {}
@@ -22,16 +30,13 @@ public class AuthorDAO {
 		int count = -1;
 		
 		// 0. import java.sql.*;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
 
 		try {
 			// 1. JDBC 드라이버 (MySQL) 로딩
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName(driver);
 
 			// 2. Connection 얻어오기
-			String url = "jdbc:mysql://localhost:3306/web_db";
-			conn = DriverManager.getConnection(url, "web", "web");
+			this.conn = DriverManager.getConnection(url, id, pw);
 			
 			// 3. SQL문 준비 / 바인딩 / 실행
 			//SQL문 준비 
@@ -49,7 +54,7 @@ public class AuthorDAO {
 			count = pstmt.executeUpdate();
 			
 			// 4.결과처리
-			System.out.println(count + "건 등록");
+			
 
 		} catch (ClassNotFoundException e) {
 			System.out.println("error: 드라이버 로딩 실패 - " + e);
@@ -79,16 +84,13 @@ public class AuthorDAO {
 		int count = -1;
 		
 		// 0. import java.sql.*;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
 		
 		try {
 			// 1. JDBC 드라이버 (MySQL) 로딩
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName(driver);
 
 			// 2. Connection 얻어오기
-			String url = "jdbc:mysql://localhost:3306/web_db";
-			conn = DriverManager.getConnection(url, "web", "web");
+			conn = DriverManager.getConnection(url, id, pw);
 
 			// 3. SQL문 준비 / 바인딩 / 실행
 			// SQL문 준비
@@ -108,7 +110,7 @@ public class AuthorDAO {
 			count = pstmt.executeUpdate();
 			
 			// 4.결과처리
-			System.out.println(count + "건이 수정 되었습니다.");
+
 			
 		} catch (ClassNotFoundException e) {
 			System.out.println("error: 드라이버 로딩 실패 - " + e);
