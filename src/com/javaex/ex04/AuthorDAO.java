@@ -25,6 +25,41 @@ public class AuthorDAO {
 	
 	//메소드일반
 	
+	//DB연결 메소드-공통
+	private void connect() {    //메인에서는 사용하지 못함
+		
+		try {
+			// 1. JDBC 드라이버 (MySQL) 로딩
+			Class.forName(driver);
+
+			// 2. Connection 얻어오기
+			this.conn = DriverManager.getConnection(url, id, pw);
+			
+		} catch (ClassNotFoundException e) {
+			System.out.println("error: 드라이버 로딩 실패 - " + e);
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+		
+	}
+	
+	//자원정리 메소드-공통
+	private void close() {
+		// 5. 자원정리
+		try {
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+	}
+	
+	
+	
 	//작가 등록
 	public int authorInsert(String name, String desc) {
 		int count = -1;
@@ -32,11 +67,11 @@ public class AuthorDAO {
 		// 0. import java.sql.*;
 
 		try {
+			
 			// 1. JDBC 드라이버 (MySQL) 로딩
-			Class.forName(driver);
-
 			// 2. Connection 얻어오기
-			this.conn = DriverManager.getConnection(url, id, pw);
+			this.connect();
+			
 			
 			// 3. SQL문 준비 / 바인딩 / 실행
 			//SQL문 준비 
@@ -55,27 +90,13 @@ public class AuthorDAO {
 			
 			// 4.결과처리
 			
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩 실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
-		} finally {
-
-			// 5. 자원정리
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("error:" + e);
-			}
-
-		}
-
+		} 
+		
+		// 5. 자원정리
+		this.close();
+		
 		return count;
 	}
 	
@@ -87,10 +108,9 @@ public class AuthorDAO {
 		
 		try {
 			// 1. JDBC 드라이버 (MySQL) 로딩
-			Class.forName(driver);
-
 			// 2. Connection 얻어오기
-			conn = DriverManager.getConnection(url, id, pw);
+			this.connect();
+			
 
 			// 3. SQL문 준비 / 바인딩 / 실행
 			// SQL문 준비
@@ -112,25 +132,12 @@ public class AuthorDAO {
 			// 4.결과처리
 
 			
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩 실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
-		} finally {
-
-			// 5. 자원정리
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("error:" + e);
-			}
-
-		}
+		} 
+		
+		// 5. 자원정리
+		this.close();
 		
 		return count;
 	}
